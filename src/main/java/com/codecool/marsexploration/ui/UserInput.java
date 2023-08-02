@@ -50,37 +50,8 @@ public class UserInput {
                     int mineralCount = Integer.parseInt(mineralCountField.getText());
                     int waterCount = Integer.parseInt(waterCountField.getText());
 
-                    int[] mountainSizes = new int[mountainCount];
-                    for (int i = 0; i < mountainCount; i++) {
-                        JTextField mountainSizeField = new JTextField(10);
-                        JPanel mountainPanel = new JPanel();
-                        mountainPanel.add(new JLabel("Size of mountain " + (i + 1) + ":"));
-                        mountainPanel.add(mountainSizeField);
-                        int mountainResult = JOptionPane.showConfirmDialog(null, mountainPanel, "Enter Mountain Size",
-                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                        if (mountainResult == JOptionPane.OK_OPTION && mountainSizeField.getText().matches("\\d+")) {
-                            mountainSizes[i] = Integer.parseInt(mountainSizeField.getText());
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Invalid input for mountain size!");
-                            break;
-                        }
-                    }
-
-                    int[] pitSizes = new int[pitCount];
-                    for(int i = 0; i < pitCount; i++) {
-                        JTextField pitSizeField = new JTextField(10);
-                        JPanel pitPanel = new JPanel();
-                        pitPanel.add(new JLabel("Size of pit " + (i + 1) + ":"));
-                        pitPanel.add(pitSizeField);
-                        int pitResult = JOptionPane.showConfirmDialog(null, pitPanel, "Enter pit size",
-                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                        if (pitResult == JOptionPane.OK_OPTION && pitSizeField.getText().matches("\\d+")) {
-                            pitSizes[i] = Integer.parseInt(pitSizeField.getText());
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Invalid input for pit size!");
-                            break;
-                        }
-                    }
+                    int[] mountainSizes = getSizes("Enter Mountain Size", "Size of mountain", mountainCount);
+                    int[] pitSizes = getSizes("Enter Pit Size", "Size of pit", pitCount);
 
                     mapConfiguration = new MapConfiguration(filename, mapWidth, mountainCount, mountainSizes, pitCount, pitSizes, mineralCount, waterCount);
                     isValid = true;
@@ -93,4 +64,24 @@ public class UserInput {
         }
         return mapConfiguration;
     }
+
+    private int[] getSizes(String title, String labelPrefix, int count) {
+        int[] sizes = new int[count];
+        for(int i = 0; i < count; i++) {
+            JTextField sizeField = new JTextField(10);
+            JPanel sizePanel = new JPanel();
+            sizePanel.add(new JLabel(labelPrefix + (i + 1) + ":"));
+            sizePanel.add(sizeField);
+            int result = JOptionPane.showConfirmDialog(null, sizePanel, title,
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result == JOptionPane.OK_OPTION && sizeField.getText().matches("\\d+")) {
+                sizes[i] = Integer.parseInt(sizeField.getText());
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid input for " +labelPrefix.toLowerCase() + " size!");
+                break;
+            }
+        }
+        return sizes;
+    }
+
 }
